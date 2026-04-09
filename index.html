@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dual‑AI Trading Assistant — Android Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --panel:#111521;
+      --panel-2:#0f1117;
+      --stroke:#21273a;
+      --text:#e7e9ef;
+      --muted:#a3a9b7;
+      --accent:#7aa2f7;
+      --accent-2:#4ade80;
+      --danger:#f97316;
+      --shadow:0 10px 30px rgba(0,0,0,.4);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0; background:var(--bg); color:var(--text); font-family:Montserrat, sans-serif;
+      display:flex; align-items:center; justify-content:center; min-height:100vh; padding:30px;
+    }
+    .phone{
+      width:390px; height:820px; background:linear-gradient(180deg,#0f1117 0%,#0b0d12 100%);
+      border:1px solid #1b2030; border-radius:40px; box-shadow:var(--shadow); padding:20px;
+      position:relative; overflow:hidden;
+    }
+    .topbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+    .status{font-size:12px; color:var(--muted);} .balance{font-weight:700;}
+    .badge{font-size:11px; padding:4px 8px; border-radius:8px; background:#1b2334; color:#d0d6e2;}
+
+    .card{background:var(--panel); border:1px solid var(--stroke); border-radius:18px; padding:14px; margin-bottom:14px;}
+
+    .ai-row{display:flex; gap:10px;}
+    .ai-toggle{flex:1; background:var(--panel-2); border:1px solid var(--stroke); border-radius:14px; padding:10px;}
+    .ai-toggle h4{margin:0 0 6px 0; font-size:13px; color:#cfd3dc;}
+    .toggle{
+      width:44px; height:24px; background:#1f2937; border-radius:20px; position:relative; display:inline-block;
+      box-shadow:inset 0 0 0 1px #2b3447; margin-top:6px;
+    }
+    .toggle::after{content:""; width:18px; height:18px; background:var(--accent); border-radius:50%; position:absolute; top:3px; left:22px;}
+    .toggle.off::after{left:4px; background:#64748b;}
+
+    .markets{display:flex; gap:8px; overflow:auto; padding-bottom:4px;}
+    .tab{padding:8px 12px; border-radius:20px; background:#14192a; border:1px solid #22293c; font-size:12px; color:#cbd1dd; white-space:nowrap;}
+    .tab.active{background:var(--accent); color:#0b0d12; font-weight:700;}
+
+    .bias{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+    .bias-pill{background:#141a2b; border:1px solid #22293c; border-radius:12px; padding:8px; text-align:center; font-size:11px;}
+    .bias-pill span{display:block; font-size:12px; margin-top:4px; font-weight:700; color:var(--accent-2);} 
+    .bearish span{color:var(--danger);} .neutral span{color:var(--muted);} 
+
+    .rules{font-size:12px; color:var(--muted); line-height:1.4;}
+    .rules b{color:#e7e9ef;}
+
+    .signal{display:flex; justify-content:space-between; margin:8px 0; font-size:12px;}
+    .signal .tag{background:#1c2436; padding:4px 6px; border-radius:8px; color:#aeb6c7;}
+
+    .manager{display:flex; justify-content:space-between; align-items:center;}
+
+    .footer{position:absolute; bottom:20px; left:20px; right:20px; display:flex; gap:10px;}
+    .btn{flex:1; padding:10px; border-radius:14px; text-align:center; background:#1a2235; border:1px solid #2a3247; font-size:13px;}
+    .btn.primary{background:var(--accent); color:#0b0d12; font-weight:700;}
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="topbar">
+      <div class="status">Demo • CFD</div>
+      <div class="balance">$12,430.18</div>
+      <div class="badge">Risk: 1%</div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="font-weight:700;">Dual‑AI Control</div>
+        <div class="badge">ATR 14</div>
+      </div>
+      <div class="ai-row">
+        <div class="ai-toggle">
+          <h4>Assistant (Signals)</h4>
+          <div class="toggle"></div>
+          <div class="rules">Always ON</div>
+        </div>
+        <div class="ai-toggle">
+          <h4>Manager (Auto‑Trade)</h4>
+          <div class="toggle off"></div>
+          <div class="rules">Execute on signal</div>
+        </div>
+      </div>
+      <div class="ai-row" style="margin-top:10px;">
+        <div class="ai-toggle" style="flex:1;">
+          <h4>Aggressive Mode</h4>
+          <div class="toggle off"></div>
+          <div class="rules">15m structure → 1m cross</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="markets">
+        <div class="tab active">Forex</div>
+        <div class="tab">Crypto</div>
+        <div class="tab">Gold</div>
+        <div class="tab">Indices</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:8px;">Bias Labels (EMA10/21)</div>
+      <div class="bias">
+        <div class="bias-pill bullish">5m<span>Bullish</span></div>
+        <div class="bias-pill bullish">15m<span>Bullish</span></div>
+        <div class="bias-pill bullish">30m<span>Bullish</span></div>
+        <div class="bias-pill neutral">1H<span>Neutral</span></div>
+        <div class="bias-pill bearish">4H<span>Bearish</span></div>
+        <div class="bias-pill bearish">Daily<span>Bearish</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:6px;">Strategy Rules</div>
+      <div class="rules">
+        <b>Normal:</b> Pullback into EMA10‑21 zone → close inside → next candle cross EMA10. <br/>
+        <b>Aggressive:</b> 15m HH/HL or LH/LL → 1m cross of prev 15m candle. <br/>
+        <b>Risk:</b> ATR stop (1x majors / 2.5x high‑vol), RR 1:2.
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:6px;">Signal Feed</div>
+      <div class="signal"><span>EURUSD • BUY</span><span class="tag">5m → 1H</span></div>
+      <div class="signal"><span>XAUUSD • SELL</span><span class="tag">15m → 4H</span></div>
+      <div class="signal"><span>BTCUSD • BUY</span><span class="tag">Aggressive</span></div>
+    </div>
+
+    <div class="card">
+      <div class="manager">
+        <div>
+          <div style="font-weight:700;">Manager Status</div>
+          <div class="rules">Idle • Waiting for signal</div>
+        </div>
+        <div class="badge">1 Trade/Signal</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="btn">Settings</div>
+      <div class="btn primary">Execute</div>
+    </div>
+  </div>
+</body>
+</html>
