@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dual‑AI Control — Interactive Prototype</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,8 +62,8 @@
 <body>
   <div class="phone">
     <div class="topbar">
-      <div class="status">Demo • CFD</div>
-      <div class="balance">$12,430.18</div>
+      <div class="status" id="acctType">Demo • CFD</div>
+      <div class="balance" id="balance">$12,430.18</div>
       <div class="badge" id="riskBadge">Risk: 1%</div>
     </div>
 
@@ -136,15 +136,18 @@
     <!-- ANALYSIS -->
     <div id="analysis" class="screen">
       <div class="card">
-        <div style="font-weight:700;">Analysis</div>
-        <div class="rules">Trend bias + EMA alignment across TFs.</div>
+        <div style="font-weight:700;">Market Watch</div>
+        <div class="rules">Forex majors + XAUUSD + BTCUSD</div>
       </div>
       <div class="card">
-        <div style="font-weight:700;margin-bottom:6px;">Market Watch</div>
         <div class="list">
           <div class="trade"><span>EURUSD</span><span class="green">1.0812</span></div>
           <div class="trade"><span>GBPUSD</span><span class="green">1.2694</span></div>
           <div class="trade"><span>USDJPY</span><span class="red">148.92</span></div>
+          <div class="trade"><span>USDCHF</span><span class="green">0.8921</span></div>
+          <div class="trade"><span>AUDUSD</span><span class="red">0.6531</span></div>
+          <div class="trade"><span>USDCAD</span><span class="green">1.3489</span></div>
+          <div class="trade"><span>NZDUSD</span><span class="red">0.6082</span></div>
           <div class="trade"><span>XAUUSD</span><span class="red">2341.6</span></div>
           <div class="trade"><span>BTCUSD</span><span class="green">68,240</span></div>
         </div>
@@ -184,20 +187,37 @@
     <div id="settings" class="screen">
       <div class="card">
         <div style="font-weight:700;">Broker & Account</div>
-        <div class="rules">Deriv CFD — Demo / Live</div>
+        <div class="rules">Deriv.com Limited</div>
+
+        <div class="row" style="margin:8px 0;">
+          <button class="btn small active" id="demoBtn">Demo</button>
+          <button class="btn small" id="liveBtn">Live</button>
+        </div>
+
         <div style="margin:8px 0;">
           <input class="input" placeholder="Email address" />
         </div>
         <div style="margin:8px 0;">
           <input class="input" placeholder="API Token" />
         </div>
+
+        <div class="rules" style="margin-top:6px;">Demo Account</div>
         <div class="row">
-          <button class="btn small">Demo</button>
-          <button class="btn small">Live</button>
-          <button class="btn small">Connect</button>
+          <input class="input" value="Deriv-Demo" />
+          <input class="input" value="31326527" />
         </div>
-        <div class="rules" style="margin-top:8px;">Account ID: •••••</div>
-        <div class="rules">Status: Disconnected</div>
+
+        <div class="rules" style="margin-top:6px;">Live Account (leave blank)</div>
+        <div class="row">
+          <input class="input" placeholder="Server" />
+          <input class="input" placeholder="Account ID" />
+        </div>
+
+        <div class="row" style="margin-top:8px;">
+          <button class="btn small">Connect</button>
+          <button class="btn small">Disconnect</button>
+        </div>
+        <div class="rules" style="margin-top:6px;">Status: Disconnected</div>
       </div>
 
       <div class="card">
@@ -257,6 +277,23 @@
         btn.classList.add('active');
         riskBadge.textContent = `Risk: ${btn.dataset.risk}%`;
       });
+    });
+
+    // Demo / Live buttons
+    const demoBtn = document.getElementById('demoBtn');
+    const liveBtn = document.getElementById('liveBtn');
+    const acctType = document.getElementById('acctType');
+
+    demoBtn.addEventListener('click', () => {
+      demoBtn.classList.add('active');
+      liveBtn.classList.remove('active');
+      acctType.textContent = 'Demo • CFD';
+    });
+
+    liveBtn.addEventListener('click', () => {
+      liveBtn.classList.add('active');
+      demoBtn.classList.remove('active');
+      acctType.textContent = 'Live • CFD';
     });
   </script>
 </body>
